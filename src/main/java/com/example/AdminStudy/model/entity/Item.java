@@ -30,7 +30,7 @@ public class Item {
 
     private String content;
 
-    private BigDecimal price;
+    private Integer price;
 
     private String brandName;
 
@@ -45,4 +45,6 @@ public class Item {
     private LocalDateTime updatedAt;
 
     private String updatedBy;
+
+    private Long partnerId;
 }
