@@ -15,7 +15,7 @@ public class OrderDetailRepositoryTest extends AdminStudyApplicationTests {
     OrderDetailRepository orderDetailRepository;
 
     @Test
-    public void create () {
+    public void create() {
 
         OrderDetail orderDetail = new OrderDetail();
 
@@ -25,11 +25,7 @@ public class OrderDetailRepositoryTest extends AdminStudyApplicationTests {
         orderDetail.setTotalPrice(BigDecimal.valueOf(900000));
         orderDetail.setCreatedAt(LocalDateTime.now());
         orderDetail.setCreatedBy("AdminServer");
-        orderDetail.setItemId(1L); // 어떠한 상품
         //orderDetail.setOrderGroupId(1L); // 어떠한 장바구니에
-
-        OrderDetail newOrderDetail = orderDetailRepository.save(orderDetail);
-
-        Assertions.assertNotNull(newOrderDetail);
+        //orderDetail.setItemId(1L); // 어떠한 상품
     }
 }

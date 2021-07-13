@@ -59,6 +59,10 @@ public class UserRepositoryTest extends AdminStudyApplicationTests {
             og.getOrderDetailList().stream().forEach(od -> {
                 System.out.println("상태 : " + od.getStatus());
                 System.out.println("상품 개수 : " + od.getQuantity());
+                System.out.println("주문 상품 : " + od.getItem().getName());
+                System.out.println("고객센터 번호 : " + od.getItem().getPartner().getCallCenter());
+                System.out.println("파트너사 이름 : " + od.getItem().getPartner().getName());
+                System.out.println("파트너사 카테고리 : " + od.getItem().getPartner().getCategory().getTitle());
             });
         });
 
