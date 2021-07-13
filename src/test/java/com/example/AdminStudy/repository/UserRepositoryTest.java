@@ -18,8 +18,8 @@ public class UserRepositoryTest extends AdminStudyApplicationTests {
     @Test
     public void create () {
 
-        String account = "Test01";
-        String password = "Test01";
+        String account = "Test02";
+        String password = "Test02";
         String status = "REGISTERED";
         String email = "Test01@gmail.com";
         String phoneNumber = "010-1111-2222";
@@ -34,8 +34,15 @@ public class UserRepositoryTest extends AdminStudyApplicationTests {
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
         user.setRegisteredAt(registeredAt);
-        user.setCreatedAt(createdAt);
-        user.setCreatedBy(createdBy);
+
+        User userBuilderTest = User.builder()
+                .account("조한석")
+                .password("password")
+                .email("iawbg13@naver.com")
+                .build(); // Lombok의 @Builder를 활용한 인스턴스 생성
+
+        User userChainTest = new User().setAccount("박지연").setStatus("등록됨"); // Lombok의 Chain을 활용한 인스턴스 생성
+        userChainTest.setStatus("해제됨").setPhoneNumber("010-0000-0000"); // Lombok의 Chain을 활용한 인스턴스 수정
 
         User newUser = userRepository.save(user);
 
