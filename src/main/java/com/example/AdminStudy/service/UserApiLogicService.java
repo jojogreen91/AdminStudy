@@ -6,10 +6,13 @@ import com.example.AdminStudy.model.network.Header;
 import com.example.AdminStudy.model.network.request.UserApiRequest;
 import com.example.AdminStudy.model.network.response.UserApiResponse;
 import com.example.AdminStudy.repository.UserRepository;
+import org.hibernate.AssertionFailure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserApiLogicService implements CrudInterface<UserApiRequest, UserApiResponse> {
@@ -17,9 +20,6 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
     @Autowired
     UserRepository userRepository;
 
-    // 1. request data
-    // 2. user 생성
-    // 3. 생성된 데이터 -> UserApiResponse return
     @Override
     public Header<UserApiResponse> create(Header<UserApiRequest> request) {
 
@@ -43,7 +43,12 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
     @Override
     public Header<UserApiResponse> read(Long id) {
-        return null;
+
+        // id -> repository getOne, getById
+        Optional<User> user = Optional.of(userRepository.getById(id));
+
+        // user -> userApiResponse return
+        return user.map(m -> response(m)).orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
     @Override
