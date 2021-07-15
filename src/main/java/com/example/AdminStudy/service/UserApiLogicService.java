@@ -53,7 +53,30 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
     @Override
     public Header<UserApiResponse> update(Header<UserApiRequest> request) {
-        return null;
+
+        // 1. data
+        UserApiRequest userApiRequest = request.getData();
+
+        // 2. id -> user 데이터를 찾고
+        User user = userRepository.getById(userApiRequest.getId());
+
+        // 3. update
+        user.setAccount(userApiRequest.getAccount())
+                .setPassword(userApiRequest.getPassword())
+                .setStatus(userApiRequest.getStatus())
+                .setEmail(userApiRequest.getEmail())
+                .setPhoneNumber(userApiRequest.getPhoneNumber())
+                .setRegisteredAt(LocalDateTime.now()); // @Accessors(chain = true)을 사용
+
+        User updateUser = userRepository.save(user);
+
+        // 4. userApiResponse
+        if (user != null) {
+            return response(updateUser);
+        }
+        else {
+            return Header.ERROR("데이터 없음");
+        }
     }
 
     @Override
