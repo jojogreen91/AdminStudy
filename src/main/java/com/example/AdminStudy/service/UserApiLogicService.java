@@ -6,10 +6,8 @@ import com.example.AdminStudy.model.network.Header;
 import com.example.AdminStudy.model.network.request.UserApiRequest;
 import com.example.AdminStudy.model.network.response.UserApiResponse;
 import com.example.AdminStudy.repository.UserRepository;
-import org.hibernate.AssertionFailure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -81,7 +79,18 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
     @Override
     public Header delete(Long id) {
-        return null;
+
+        // 1. id -> repository -> delete
+        User user = userRepository.getById(id);
+        userRepository.deleteById(id);
+
+        // 2. return
+        if (user != null) {
+            return Header.OK();
+        }
+        else {
+            return Header.ERROR("데이터 없음");
+        }
     }
 
     private Header<UserApiResponse> response (User user) {
