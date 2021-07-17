@@ -43,11 +43,11 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
     public Header<UserApiResponse> read(Long id) {
 
         // id -> repository getOne, getById
-        // Optional<User> user = Optional.of(userRepository.getById(id));
+        /// Optional<User> user = Optional.of(userRepository.getById(id));
         User user = userRepository.getById(id);
 
         // user -> userApiResponse return
-        // return user.map(m -> response(m)).orElseGet(() -> Header.ERROR("데이터 없음"));
+        /// return user.map(m -> response(m)).orElseGet(() -> Header.ERROR("데이터 없음"));
         if (user != null) {
             return response(user);
         }

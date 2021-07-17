@@ -50,8 +50,10 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     @Override
     public Header<ItemApiResponse> read(Long id) {
 
+        // id -> repository getOne, getById
         Optional<Item> item = Optional.of(itemRepository.getById(id));
 
+        // item -> itemApiResponse return
         return item.map(m -> response(m)).orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
@@ -83,7 +85,18 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
     @Override
     public Header delete(Long id) {
-        return null;
+
+        // 1. id -> repository -> delete
+        Item item = itemRepository.getById(id);
+        itemRepository.deleteById(id);
+
+        // 2. return
+        if (item != null) {
+            return Header.OK();
+        }
+        else {
+            return Header.ERROR("데이터 없음");
+        }
     }
 
     private Header<ItemApiResponse> response (Item item) {
