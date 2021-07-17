@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findFirstByPhoneNumberOrderByIdDesc (String phoneNumber);
+
+    // 2차 피드백 과제
+    User findByEmail (String email);
 }

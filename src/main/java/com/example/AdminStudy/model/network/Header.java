@@ -51,4 +51,13 @@ public class Header<T> {
                 .description(description)
                 .build();
     }
+
+    // 2차 피드백 과제
+    public static <T> Header<T> EMAILEXIST () {
+        return (Header<T>)Header.builder()
+                .transactionTime(LocalDateTime.now())
+                .resultCode("ERROR")
+                .description("이미 존재하는 이메일 입니다.")
+                .build();
+    }
 }
