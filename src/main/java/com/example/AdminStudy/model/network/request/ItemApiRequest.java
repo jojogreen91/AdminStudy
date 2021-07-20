@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 public class ItemApiRequest {
 
-    private long id;
+    private Long id;
 
     private String status;
 
