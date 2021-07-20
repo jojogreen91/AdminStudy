@@ -58,7 +58,25 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
     @Override
     public Header<OrderGroupApiResponse> update(Header<OrderGroupApiRequest> request) {
-        return null;
+
+        OrderGroupApiRequest orderGroupApiRequest = request.getData();
+
+        OrderGroup orderGroup = orderGroupRepository.getById(orderGroupApiRequest.getId());
+
+        orderGroup.setStatus(orderGroupApiRequest.getStatus())
+                .setOrderType(orderGroupApiRequest.getOrderType())
+                .setRevAddress(orderGroupApiRequest.getRevAddress())
+                .setRevName(orderGroupApiRequest.getRevName())
+                .setPaymentType(orderGroupApiRequest.getPaymentType())
+                .setTotalPrice(orderGroupApiRequest.getTotalPrice())
+                .setTotalQuantity(orderGroupApiRequest.getTotalQuantity())
+                .setOrderAt(orderGroupApiRequest.getOrderAt())
+                .setArrivalDate(orderGroupApiRequest.getArrivalDate())
+                .setUser(userRepository.getById(orderGroupApiRequest.getUserId()));
+
+        OrderGroup updateOrderGroup = orderGroupRepository.save(orderGroup);
+
+        return response(updateOrderGroup);
     }
 
     @Override
@@ -69,6 +87,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
     private Header<OrderGroupApiResponse> response (OrderGroup orderGroup) {
 
         OrderGroupApiResponse orderGroupApiResponse = OrderGroupApiResponse.builder()
+                .id(orderGroup.getId())
                 .status(orderGroup.getStatus())
                 .orderType(orderGroup.getOrderType())
                 .revAddress(orderGroup.getRevAddress())
