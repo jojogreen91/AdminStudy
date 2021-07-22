@@ -13,10 +13,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
+public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiResponse, Partner> {
 
-    @Autowired
-    private PartnerRepository partnerRepository;
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -38,7 +36,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 .category(categoryRepository.getById(partnerApiRequest.getCategoryId()))
                 .build();
 
-        Partner newPartner = partnerRepository.save(partner);
+        Partner newPartner = baseRepository.save(partner);
 
         return response(newPartner);
     }
@@ -46,7 +44,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
     @Override
     public Header<PartnerApiResponse> read(Long id) {
 
-        Partner partner = partnerRepository.getById(id);
+        Partner partner = baseRepository.getById(id);
 
         return response(partner);
     }
@@ -56,7 +54,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 
         PartnerApiRequest partnerApiRequest = request.getData();
 
-        Partner partner = partnerRepository.getById(partnerApiRequest.getId())
+        Partner partner = baseRepository.getById(partnerApiRequest.getId())
                 .setName(partnerApiRequest.getName())
                 .setStatus(partnerApiRequest.getStatus())
                 .setAddress(partnerApiRequest.getAddress())
@@ -68,7 +66,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 .setUnregisteredAt(partnerApiRequest.getUnregisteredAt())
                 .setCategory(categoryRepository.getById(partnerApiRequest.getCategoryId()));
 
-        Partner updatePartner = partnerRepository.save(partner);
+        Partner updatePartner = baseRepository.save(partner);
 
         return response(updatePartner);
     }
@@ -76,9 +74,9 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
     @Override
     public Header delete(Long id) {
 
-        Partner partner = partnerRepository.getById(id);
+        Partner partner = baseRepository.getById(id);
 
-        partnerRepository.deleteById(id);
+        baseRepository.deleteById(id);
 
         return Header.OK();
     }

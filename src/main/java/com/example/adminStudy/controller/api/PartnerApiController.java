@@ -1,6 +1,8 @@
 package com.example.adminStudy.controller.api;
 
+import com.example.adminStudy.controller.CrudController;
 import com.example.adminStudy.ifs.CrudInterface;
+import com.example.adminStudy.model.entity.Partner;
 import com.example.adminStudy.model.network.Header;
 import com.example.adminStudy.model.network.request.PartnerApiRequest;
 import com.example.adminStudy.model.network.response.PartnerApiResponse;
@@ -12,40 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/partner")
-public class PartnerApiController implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
+public class PartnerApiController extends CrudController<PartnerApiRequest, PartnerApiResponse, Partner> {
 
-    @Autowired
-    private PartnerApiLogicService partnerApiLogicService;
-
-    @Override
-    @PostMapping("")
-    public Header<PartnerApiResponse> create(@RequestBody Header<PartnerApiRequest> request) {
-
-        log.info("{}", request);
-        return partnerApiLogicService.create(request);
-    }
-
-    @Override
-    @GetMapping("{id}")
-    public Header<PartnerApiResponse> read(@PathVariable Long id) {
-
-        log.info("read id : {}", id);
-        return partnerApiLogicService.read(id);
-    }
-
-    @Override
-    @PutMapping("")
-    public Header<PartnerApiResponse> update(@RequestBody Header<PartnerApiRequest> request) {
-
-        log.info("{}", request);
-        return partnerApiLogicService.update(request);
-    }
-
-    @Override
-    @DeleteMapping("{id}")
-    public Header delete(@PathVariable Long id) {
-
-        log.info("delete id : {}", id);
-        return partnerApiLogicService.delete(id);
-    }
 }
