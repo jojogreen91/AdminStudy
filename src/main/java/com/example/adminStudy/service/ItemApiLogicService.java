@@ -14,10 +14,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemApiResponse> {
+public class ItemApiLogicService extends BaseService<ItemApiRequest, ItemApiResponse, Item> {
 
-    @Autowired
-    private ItemRepository itemRepository;
     @Autowired
     private PartnerRepository partnerRepository;
 
@@ -39,7 +37,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .partner(partnerRepository.getOne(itemApiRequest.getPartnerId()))
                 .build();
 
-        Item newItem = itemRepository.save(item);
+        Item newItem = baseRepository.save(item);
 
         // 3. 생성된 데이터 -> UserApiResponse return
         return response(newItem);
@@ -49,7 +47,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     public Header<ItemApiResponse> read(Long id) {
 
         // id -> repository getOne, getById
-        Optional<Item> item = Optional.of(itemRepository.getById(id));
+        Optional<Item> item = Optional.of(baseRepository.getById(id));
 
         // item -> itemApiResponse return
         return item.map(m -> response(m)).orElseGet(() -> Header.ERROR("데이터 없음"));
@@ -62,7 +60,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
         ItemApiRequest itemApiRequest = request.getData();
 
         // 2. id -> item 데이터를 찾고
-        Item item = itemRepository.getById(itemApiRequest.getId());
+        Item item = baseRepository.getById(itemApiRequest.getId());
 
         // 3. update
         item.setStatus(itemApiRequest.getStatus())
@@ -75,7 +73,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
                 .setUnregisteredAt(itemApiRequest.getUnregisteredAt())
                 .setPartner(partnerRepository.getOne(itemApiRequest.getPartnerId()));
 
-        Item updateItem = itemRepository.save(item);
+        Item updateItem = baseRepository.save(item);
 
         // 4. itemApiResponse
         return response(updateItem);
@@ -85,8 +83,8 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
     public Header delete(Long id) {
 
         // 1. id -> repository -> delete
-        Item item = itemRepository.getById(id);
-        itemRepository.deleteById(id);
+        Item item = baseRepository.getById(id);
+        baseRepository.deleteById(id);
 
         // 2. return
         if (item != null) {
