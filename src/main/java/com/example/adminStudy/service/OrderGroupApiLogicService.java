@@ -2,15 +2,18 @@ package com.example.adminStudy.service;
 
 import com.example.adminStudy.ifs.CrudInterface;
 import com.example.adminStudy.model.entity.OrderGroup;
+import com.example.adminStudy.model.entity.Settlement;
 import com.example.adminStudy.model.network.Header;
 import com.example.adminStudy.model.network.request.OrderGroupApiRequest;
 import com.example.adminStudy.model.network.response.OrderGroupApiResponse;
 import com.example.adminStudy.repository.OrderGroupRepository;
+import com.example.adminStudy.repository.SettlementRepository;
 import com.example.adminStudy.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiRequest, OrderGroupApiResponse> {
@@ -19,6 +22,8 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
     private OrderGroupRepository orderGroupRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SettlementRepository settlementRepository;
 
     @Override
     public Header<OrderGroupApiResponse> create(Header<OrderGroupApiRequest> request) {
@@ -39,6 +44,11 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                 .build();
 
         OrderGroup newOrderGroup = orderGroupRepository.save(orderGroup);
+
+        // 새로운 OrderGroup이 생성되면 해당 UserId를 가지는 Settlement는 삭제한다.
+        Optional<Settlement> settlement = settlementRepository.findByUserId(orderGroupApiRequest.getUserId());
+        Settlement savedSettlement = settlement.get();
+        settlementRepository.deleteById(savedSettlement.getId());
 
         return response(newOrderGroup);
     }
