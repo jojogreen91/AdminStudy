@@ -89,7 +89,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
         }
     }
 
-    private Header<OrderGroupApiResponse> response (OrderGroup orderGroup) {
+    public Header<OrderGroupApiResponse> response (OrderGroup orderGroup) {
 
         OrderGroupApiResponse orderGroupApiResponse = OrderGroupApiResponse.builder()
                 .id(orderGroup.getId())
