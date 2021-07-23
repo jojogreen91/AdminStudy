@@ -158,30 +158,27 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
         return Header.OK(userApiResponseList, pagination);
     }
 
-    public Header<UserOrderInfoApiResponse> orderInfo(Long id) {
+    public Header<UserOrderInfoApiResponse> orderInfo (Long id) {
 
-        // user
         User user = userRepository.getById(id);
         UserApiResponse userApiResponse = response(user);
 
-        // orderGroup
-        List<OrderGroup> orderGroupList = user.getOrderGroupList();
-        List<OrderGroupApiResponse> orderGroupApiResponseList = orderGroupList.stream()
+        List<OrderGroupApiResponse> orderGroupApiResponseList = user.getOrderGroupList().stream()
                 .map(orderGroup -> {
                     OrderGroupApiResponse orderGroupApiResponse = orderGroupApiLogicService.response(orderGroup).getData();
 
-                    // itemApiResponse
                     List<ItemApiResponse> itemApiResponseList = orderGroup.getOrderDetailList().stream()
-                            .map(orderDetail -> orderDetail.getItem())
-                            .map(item -> itemApiLogicService.response(item).getData())
+                            .map(orderDetail -> itemApiLogicService.response(orderDetail.getItem()).getData())
                             .collect(Collectors.toList());
 
                     orderGroupApiResponse.setItemApiResponseList(itemApiResponseList);
+
                     return orderGroupApiResponse;
                 })
                 .collect(Collectors.toList());
 
         userApiResponse.setOrderGroupApiResponseList(orderGroupApiResponseList);
+
         UserOrderInfoApiResponse userOrderInfoApiResponse = UserOrderInfoApiResponse.builder()
                 .userApiResponse(userApiResponse)
                 .build();
